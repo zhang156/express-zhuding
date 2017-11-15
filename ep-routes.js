@@ -6,7 +6,7 @@ module.exports = app => {
     // 拦截器
     app.all('*', (req, res, next) => {
         // 配置允许跨域
-        const allowedOrigins = ['https://surmon.me', 'https://admin.surmon.me'];
+        const allowedOrigins = ['https://zhuding.xyz', 'https://admin.zhuding.xyz'];
 		const origin = req.headers.origin || '';
 		if (allowedOrigins.includes(origin) || origin.includes('localhost')) {
 			res.setHeader('Access-Control-Allow-Origin', origin);
@@ -21,5 +21,5 @@ module.exports = app => {
     })
 
     // 获取文章列表
-    app.get('/article', controller.articles.list)
+    app.get('/article', controller.article.list)
 }

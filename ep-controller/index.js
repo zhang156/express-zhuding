@@ -1,1 +1,1 @@
-exports.articles = require('./articles.controller')
+exports.article = require('./article.controller')

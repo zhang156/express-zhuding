@@ -21,5 +21,8 @@ module.exports = app => {
     })
 
     // 获取文章列表
-    app.get('/article', controller.article.list)
+	app.get('/article', controller.article.list)
+	
+	// 获取文章内容
+	app.get('/article/:article_id',controller.article.item)
 }

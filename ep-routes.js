@@ -22,7 +22,8 @@ module.exports = app => {
 
     // 获取文章列表
 	app.get('/article', controller.article.list)
-	
+	// 获取热门文章
+	app.get('/hotArticle', controller.article.hotlist)
 	// 获取文章内容
 	app.get('/article/:article_id',controller.article.item)
 }

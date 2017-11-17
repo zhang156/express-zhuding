@@ -1,6 +1,6 @@
 var {handleRequest, handleError, handleSuccess} = require('../ep-utils/ep-handle')
 var Article = require('../ep-model/article.model')
-var articleCtrl = {list: {}, item: {}}
+var articleCtrl = {list: {}, hotlist:{}, item: {}}
 
 // 获取文章列表
 articleCtrl.list.GET = (req, res) => {
@@ -40,6 +40,37 @@ articleCtrl.list.GET = (req, res) => {
     };
     
     getArticles()
+}
+
+articleCtrl.hotlist.GET = (req, res) => {
+	var { page, per_page } = req.query
+	
+	// 过滤条件
+	const options = {
+		sort: { 'meta.views': -1, 'meta.likes': -1 },
+		page: Number(page || 1),
+		limit: Number(per_page || 10)
+	}
+
+	// 查询参数
+	let querys = {};
+	
+	Article.paginate(querys, options).then(hotArticle => {
+		handleSuccess({
+			res, 
+			message: '热门文章获取成功', 
+			result: {
+				pagination: {
+					total: hotArticle.total,
+					current_page: hotArticle.page,
+					total_page: hotArticle.pages,
+					per_page: hotArticle.limit
+				},
+				data: hotArticle.docs
+			}
+		})
+	})
+
 }
 
 // 获取文章内容
@@ -92,9 +123,13 @@ const tmp = () => {
 // tmp()
 
 exports.list = (req, res) => {
-    handleRequest(req, res, articleCtrl.list);
+    handleRequest(req, res, articleCtrl.list)
+}
+
+exports.hotlist = (req, res) => {
+	handleRequest(req, res, articleCtrl.hotlist)
 }
 
 exports.item = (req, res) => {
-	handleRequest(req, res, articleCtrl.item);
+	handleRequest(req, res, articleCtrl.item)
 }

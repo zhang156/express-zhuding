@@ -4,22 +4,21 @@ var articleCtrl = {list: {}, hotlist:{}, item: {}}
 
 // 获取文章列表
 articleCtrl.list.GET = (req, res) => {
-    var { page, per_page } = req.query
+  var { page, per_page } = req.query
 
     // 过滤条件
 	const options = {
 		sort: { _id: -1 },
 		page: Number(page || 1),
 		limit: Number(per_page || 10)
-    }
+  }
     
-    // 查询参数
-    let querys = {};
+	// 查询参数
+	let querys = {};
     
     // 请求对应文章
 	const getArticles = () => {
-		Article.paginate(querys, options)
-		.then(articles => {
+		Article.paginate(querys, options).then(articles => {
 			handleSuccess({
 				res,
 				message: '文章列表获取成功',
@@ -33,15 +32,29 @@ articleCtrl.list.GET = (req, res) => {
 					data: articles.docs
 				}
 			})
-		})
-		.catch(err => {
+		}).catch(err => {
 			handleError({ res, err, message: '文章列表获取失败' });
 		})
-    };
+  }
     
-    getArticles()
+  getArticles()
 }
 
+articleCtrl.list.POST = (req, res) => {
+	var article = req.body
+	// console.log(article)
+	if (!article.title || !article.content) {
+		handleError({res, message: '内容不合法'})
+	} else {
+		new Article(article).save().then(result => {
+			handleSuccess({res, result, message: '文章发布成功'})
+		}).catch(err => {
+			handleError({res, message: '文章保存失败', err})
+		})
+	}
+}
+
+// 获取热门文章列表
 articleCtrl.hotlist.GET = (req, res) => {
 	var { page, per_page } = req.query
 	
@@ -76,7 +89,6 @@ articleCtrl.hotlist.GET = (req, res) => {
 // 获取文章内容
 articleCtrl.item.GET = (req, res) => {
 	var article_id = req.params.article_id
-
 	// 判断参数是否正常
 	var isId = !!article_id && !Object.is(Number(article_id), NaN)
 
@@ -85,11 +97,7 @@ articleCtrl.item.GET = (req, res) => {
 	.then(result => {
 		if (isId) {
 			result.meta.views += 1
-			Article.update(result, (err, doc) => {
-				if (err) {
-					handleError({res, err, message: '阅读次数增加失败'})
-				}
-			})
+			Article.update(result)
 		}
 		handleSuccess({
 			res,

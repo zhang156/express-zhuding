@@ -8,6 +8,7 @@ module.exports = app => {
         // 配置允许跨域
         const allowedOrigins = ['https://zhuding.xyz', 'https://admin.zhuding.xyz'];
 		const origin = req.headers.origin || '';
+		console.log(origin)
 		if (allowedOrigins.includes(origin) || origin.includes('localhost')) {
 			res.setHeader('Access-Control-Allow-Origin', origin);
 		};
@@ -17,11 +18,17 @@ module.exports = app => {
 		res.header('Content-Type', 'application/json;charset=utf-8');
 		res.header('X-Powered-By', 'Nodepress 1.0.0');
 
+		// OPTIONS
+		if (req.method == 'OPTIONS') {
+			res.sendStatus(200);
+			return false;
+		};
+
         next();
     })
 
     // 获取文章列表
-	app.get('/article', controller.article.list)
+	app.all('/article', controller.article.list)
 	// 获取热门文章
 	app.get('/hotArticle', controller.article.hotlist)
 	// 获取文章内容

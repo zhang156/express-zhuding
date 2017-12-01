@@ -39,4 +39,11 @@ module.exports = app => {
 
 	//获取类别
 	app.all('/category', controller.category.list)
+
+
+	// 上传文件
+	app.all('/uploadFile', (req, res) => {
+		console.log(req)
+		res.jsonp({code: 1})
+	})
 }

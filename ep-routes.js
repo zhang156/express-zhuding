@@ -25,7 +25,10 @@ module.exports = app => {
 		};
 
         next();
-    })
+	})
+	
+	// 七牛token
+	app.all('/qiniu', controller.qiniu)
 
     // 获取文章列表
 	app.all('/article', controller.article.list)

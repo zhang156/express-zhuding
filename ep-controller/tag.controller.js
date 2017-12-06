@@ -10,6 +10,19 @@ tagCtrl.list.GET = (req, res) => {
   })
 }
 
+tagCtrl.list.post = (req, res) => {
+  var tag = req.body
+  if (!tag.name) {
+    handleError({ res, message: '内容不合法', err })
+  } else {
+    new Tag(tag).save().then(result => {
+			handleSuccess({res, result, message: '标签新建成功'})
+		}).catch(err => {
+			handleError({res, message: '标签新建失败', err})
+		})
+  }
+}
+
 exports.list = (req, res) => {
   handleRequest(req, res, tagCtrl.list)
 }

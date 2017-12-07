@@ -10,6 +10,19 @@ categoryCtrl.list.GET = (req, res) => {
   })
 }
 
+categoryCtrl.list.POST = (req, res) => {
+  var data = req.body
+  if (!data.name) {
+    handleError({ res, message: '内容不合法' })
+  } else {
+    new Category(data).save().then(result => {
+      handleSuccess({ res, message: '新增类别成功', result })
+    }).catch(err => {
+      handleError({ res, message: '新增类别失败', err })
+    }) 
+  }
+}
+
 exports.list = (req, res) => {
   handleRequest(req, res, categoryCtrl.list)
 }

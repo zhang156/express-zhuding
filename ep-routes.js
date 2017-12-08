@@ -1,5 +1,7 @@
 var config = require('./ep-config')
 var controller = require('./ep-controller')
+var multer = require('multer')
+var upload = multer()
 
 module.exports = app => {
 
@@ -28,7 +30,10 @@ module.exports = app => {
 	})
 	
 	// 七牛token
-	app.all('/qiniu', controller.qiniu)
+	app.all('/qiniuToken', controller.qiniu.token)
+
+	// 上传文件
+	app.all('/uploadFile', upload.single('file'), controller.qiniu.upload)
 
     // 获取文章列表
 	app.all('/article', controller.article.list)
@@ -42,11 +47,4 @@ module.exports = app => {
 
 	//获取类别
 	app.all('/category', controller.category.list)
-
-
-	// 上传文件
-	app.all('/uploadFile', (req, res) => {
-		console.log(req)
-		res.jsonp({code: 1})
-	})
 }

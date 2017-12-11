@@ -43,10 +43,10 @@ var articleSchema = new mongoose.Schema({
     update_at: { type: Date, default: Date.now },
 
     // 文章标签
-    tag: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag'}],
+    tag: [{ type: String}],
 
     // 文章分类
-    category: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true }],
+    category: [{ type: String, required: true }],
 
     // 其他元信息
     meta: {

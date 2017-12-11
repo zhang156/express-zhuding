@@ -11,8 +11,8 @@ const qiniuCtrl = {};
 
 const mac = new qiniu.auth.digest.Mac(config.QINIU.accessKey, config.QINIU.secretKey)
 const putPolicy = new qiniu.rs.PutPolicy({
-	scope: config.QINIU.bucket
-	// returnBody: {"key":"$(key)", "hash":"$(etag)", "fsize":$(fsize), "bucket":"$(bucket)", "name":"$(x:name)"}
+	scope: config.QINIU.bucket,
+	returnBody: '{"key":"$(key)", "hash":"$(etag)", "fsize":$(fsize), "bucket":"$(bucket)", "name":"$(x:name)"}'
 })
 
 var qn_upload_config = new qiniu.conf.Config()
@@ -35,6 +35,7 @@ qiniuCtrl.POST = (req, res) => {
 
 		formUploader.put(token, file.originalname, file.buffer, putExtra, (respErr, respBody, respInfo) => {
 			if (respInfo.statusCode == 200) {
+				respBody.origin = config.QINIU.origin
 				handleSuccess({ res, message: '上传文件成功', result: respBody })
 			} else {
 				handleError({ res, message: `上传${respInfo.statusCode}`, err: respBody })

@@ -14,6 +14,6 @@ exports.QINIU = {
 	accessKey: argv.qn_accessKey || 'your accessKey',
 	secretKey: argv.qn_secretKey || 'your secretKey',
 	bucket: argv.qn_bucket || 'picture',
-	origin: argv.qn_origin || 'http://picture.qiniudn.com',
+	origin: argv.qn_origin || 'http://picture.zhangwei666.cn',
 	uploadURL: argv.qn_uploadURL || 'http://up.qiniu.com/'
 }

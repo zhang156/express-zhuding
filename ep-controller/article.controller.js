@@ -97,13 +97,15 @@ articleCtrl.item.GET = (req, res) => {
 	.then(result => {
 		if (isId) {
 			result.meta.views += 1
-			Article.update(result)
+			Article.update(result).exec()
 		}
-		handleSuccess({
-			res,
-			message: '文章内容获取成功',
-			result: result
-		})
+		if (result) {
+			handleSuccess({
+				res,
+				message: '文章内容获取成功',
+				result: result
+			})
+		}
 	})
 	.catch(err => {
 		handleError({res, err, message: '文章获取失败'})

@@ -4,7 +4,7 @@ var articleCtrl = {list: {}, hotlist:{}, item: {}}
 
 // 获取文章列表
 articleCtrl.list.GET = (req, res) => {
-  var { page, per_page } = req.query
+  var { page, per_page, state, public } = req.query
 
     // 过滤条件
 	const options = {
@@ -14,8 +14,14 @@ articleCtrl.list.GET = (req, res) => {
   }
     
 	// 查询参数
-	let querys = {};
-    
+	let querys = {}
+	if (state) {
+		querys.state = state
+	}
+	if (public) {
+		querys.public = public
+	}
+
     // 请求对应文章
 	const getArticles = () => {
 		Article.paginate(querys, options).then(articles => {
@@ -50,6 +56,23 @@ articleCtrl.list.POST = (req, res) => {
 			handleSuccess({res, result, message: '文章发布成功'})
 		}).catch(err => {
 			handleError({res, message: '文章保存失败', err})
+		})
+	}
+}
+
+// 文章更新
+articleCtrl.list.PUT = (req, res) => {
+	var article = req.body
+
+	if (!article.title || !article.content) {
+		handleError({ res, message: '文章内容不合法' })
+	} else {
+		Article.update(article).exec().then(result => {
+			if (result) {
+				handleSuccess({ res, message: '文章更新成功', result })
+			}
+		}).catch(err => {
+			handleError({ res, message: '文章更新失败', err })
 		})
 	}
 }
